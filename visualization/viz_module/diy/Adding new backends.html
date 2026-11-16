@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adding new backends &mdash; sisl 0.1-dea8f6b</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/tabs.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/nbsphinx-code-cells.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/custom_styles.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=0b138a9b"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+        <script src="../../../_static/tabs.js?v=3ee01567"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="API documentation" href="../../../api/index.html" />
+    <link rel="prev" title="Intro to multiple plots" href="../combining-plots/Intro%20to%20multiple%20plots.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sisl
+          </a>
+              <div class="version">
+                0.1-dea8f6b
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog/index.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../other.html">Other resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../cite.html">Citing sisl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../publications.html">Publications using sisl</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../scripts/scripts.html">Command line scripts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../nodes/nodes_intro.html">Nodes and workflows</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Toolboxes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../toolbox/index.html">Toolboxes</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Visualization</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../ase/index.html">ASE</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">The <code class="docutils literal notranslate"><span class="pre">sisl.viz</span></code> module</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../index.html#basic-tutorials">Basic Tutorials</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#showcase-of-plot-classes">Showcase of plot classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#using-it-with-blender">Using it with blender</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#combining-plots">Combining plots</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#do-it-yourself">Do it yourself</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Adding new backends</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Extending-an-existing-backend">Extending an existing backend</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Creating-a-backend-for-a-supported-framework">Creating a backend for a supported framework</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Creating-a-backend-for-a-non-supported-framework">Creating a backend for a non supported framework</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/index.html">API documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sisl</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">The <code class="docutils literal notranslate"><span class="pre">sisl.viz</span></code> module</a></li>
+      <li class="breadcrumb-item active">Adding new backends</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/visualization/viz_module/diy/Adding new backends.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div align="right">
+Download IPython notebook <a href="https://raw.githubusercontent.com/zerothi/sisl/master//home/runner/work/sisl/sisl/docs/visualization/viz_module/diy/Adding new backends.ipynb"> here</a>.
+<span style="white-space: nowrap;"><a href="https://mybinder.org/v2/gh/zerothi/sisl/master?filepath=/home/runner/work/sisl/sisl/docs/visualization/viz_module/diy/Adding new backends.ipynb"><img alt="Binder badge" src="https://mybinder.org/badge_logo.svg" style="vertical-align:text-bottom"></a>.</span>
+</div><section id="Adding-new-backends">
+<h1>Adding new backends<a class="headerlink" href="#Adding-new-backends" title="Link to this heading"></a></h1>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sisl</span>
+<span class="kn">import</span> <span class="nn">sisl.viz</span>
+
+<span class="c1"># This is a toy band structure to illustrate the concepts treated throughout the notebook</span>
+<span class="n">geom</span> <span class="o">=</span> <span class="n">sisl</span><span class="o">.</span><span class="n">geom</span><span class="o">.</span><span class="n">graphene</span><span class="p">(</span><span class="n">orthogonal</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">H</span> <span class="o">=</span> <span class="n">sisl</span><span class="o">.</span><span class="n">Hamiltonian</span><span class="p">(</span><span class="n">geom</span><span class="p">)</span>
+<span class="n">H</span><span class="o">.</span><span class="n">construct</span><span class="p">([(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.44</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.7</span><span class="p">)],</span> <span class="p">)</span>
+
+<span class="n">band_struct</span> <span class="o">=</span> <span class="n">sisl</span><span class="o">.</span><span class="n">BandStructure</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]],</span> <span class="mi">10</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;Gamma&quot;</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<p>In the <code class="docutils literal notranslate"><span class="pre">sisl.viz</span></code> framework, the rendering part of the visualization is <strong>completely detached from the processing part</strong>. Because of that, we have the flexibility to add new ways of generating the final product by registering what we call <code class="docutils literal notranslate"><span class="pre">backends</span></code>.</p>
+<p>We will guide you through how you might customize this part of the framework. There are however, very distinct scenarios where you might find yourself. Each of the following sections explains the details of each situation, which are ordered in increasing complexity.</p>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle">Note</p>
+<p>Even if you want to go to the most complex situation, make sure that you first understand the simpler ones!</p>
+</div>
+<section id="Extending-an-existing-backend">
+<h2>Extending an existing backend<a class="headerlink" href="#Extending-an-existing-backend" title="Link to this heading"></a></h2>
+<p>This is by far the easiest situation. For example, <code class="docutils literal notranslate"><span class="pre">sisl</span></code> <strong>already provides a backend to plot bands with</strong> <code class="docutils literal notranslate"><span class="pre">plotly</span></code>, but <strong>you are not totally happy with the way it’s done</strong>.</p>
+<p>In this case, you grab the provided backend:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sisl.viz.backends.plotly</span> <span class="kn">import</span> <span class="n">PlotlyBandsBackend</span>
+</pre></div>
+</div>
+</div>
+<p>And then create your own class that inherits from it:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyOwnBandsBackend</span><span class="p">(</span><span class="n">PlotlyBandsBackend</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+<p>The only thing left to do now is to <strong>let</strong> <code class="docutils literal notranslate"><span class="pre">BandsPlot</span></code> <strong>know that there’s a new backend available</strong>. This action is called <em>registering</em> a backend.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sisl.viz</span> <span class="kn">import</span> <span class="n">BandsPlot</span>
+
+<span class="n">BandsPlot</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;plotly_myown&quot;</span><span class="p">,</span> <span class="n">MyOwnBandsBackend</span><span class="p">)</span>
+<span class="c1"># Pass default=True if you want to make it the default backend</span>
+</pre></div>
+</div>
+</div>
+<p>All good, you can already use your new backend!</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">band_struct</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="s2">&quot;plotly_myown&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "ec8839592c7a4ef48c1c480a54a03460"}</script></div>
+</div>
+<p>Now that we know that it can be registered, we can try to add new functionality. But of course, <strong>we need to know how the backend works</strong> if we need to modify it. All backends to draw bands inherit from <code class="docutils literal notranslate"><span class="pre">BandsBackend</span></code>, and you can find some information there on how it works. Let’s read its documentation:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sisl.viz.backends.templates</span> <span class="kn">import</span> <span class="n">BandsBackend</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">BandsBackend</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Draws the bands provided by a `BandsPlot`
+
+    The workflow implemented by it is as follows:
+        First, `self.draw_bands` draws all bands like:
+            for band in bands:
+                if (spin texture needs to be drawn):
+                    `self._draw_spin_textured_band()`, NO GENERIC IMPLEMENTATION (optional)
+                else:
+                    `self._draw_band()`, generic implementation that calls `self._draw_line`
+        Once all bands are drawn, `self.draw_gaps` loops through all the gaps to be drawn:
+            for gap in gaps:
+                `self.draw_gap()`, MUST BE IMPLEMENTED!
+
+</pre></div></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle">Note</p>
+<p>This already gives you an overview of how the backend works. If you want to know the very fine details, you can always go to the source code.</p>
+</div>
+<p>So, clearly <code class="docutils literal notranslate"><span class="pre">PlotlyBandsBackend</span></code> already contains the <code class="docutils literal notranslate"><span class="pre">draw_gap</span></code> method, otherwise it would not work.</p>
+<p>From the workflow description, we understand that each band is drawn with the <code class="docutils literal notranslate"><span class="pre">_draw_band</span></code> method, which calls the generic <code class="docutils literal notranslate"><span class="pre">draw_line</span></code> method. In plotly, line information is passed as dictionaries that contain several parameters. One of them is, for example, <code class="docutils literal notranslate"><span class="pre">showlegend</span></code>, which controls whether the line appears in the legend. We can use therefore our plotly knowledge to only show at the legend those bands that are below the fermi level:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create my new backend</span>
+<span class="k">class</span> <span class="nc">MyOwnBandsBackend</span><span class="p">(</span><span class="n">PlotlyBandsBackend</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">_draw_band</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;showlegend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_draw_band</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="c1"># And register it again</span>
+<span class="n">BandsPlot</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;plotly_myown&quot;</span><span class="p">,</span> <span class="n">MyOwnBandsBackend</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">band_struct</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="s2">&quot;plotly_myown&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "2780375a73e64bc0a565af025ed9e8c4"}</script></div>
+</div>
+<p>This is not very interesting, but it does its job at illustrating the fact that you can register a slightly modified <em>backend</em>.</p>
+<p>You could use your fresh knowledge to, for example draw something after the bands are drawn:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyOwnBandsBackend</span><span class="p">(</span><span class="n">PlotlyBandsBackend</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">draw_bands</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">draw_bands</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># Now that all bands are drawn, draw a very interesting line at -2eV.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_hline</span><span class="p">(</span><span class="n">y</span><span class="o">=-</span><span class="mi">2</span><span class="p">,</span> <span class="n">line_color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+
+<span class="n">BandsPlot</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;plotly_myown&quot;</span><span class="p">,</span> <span class="n">MyOwnBandsBackend</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">band_struct</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="s2">&quot;plotly_myown&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "98287c26221144a4bc5290550c969b63"}</script></div>
+</div>
+<p>We finish this section by stating that:</p>
+<ul class="simple">
+<li><p>To extend a backend, you have to have <strong>some knowledge about the corresponding framework</strong> (in this case <code class="docutils literal notranslate"><span class="pre">plotly</span></code>)</p></li>
+<li><p>You <strong>don’t need to create a new backend for every modification</strong>. You can modify plots interactively however you want after the plot is generated. Creating a backend that extends an existing one is only useful if <strong>there are changes that you will always want to do</strong> because of personal preference or because you are building a graphical interface, for example.</p></li>
+</ul>
+</section>
+<section id="Creating-a-backend-for-a-supported-framework">
+<h2>Creating a backend for a supported framework<a class="headerlink" href="#Creating-a-backend-for-a-supported-framework" title="Link to this heading"></a></h2>
+<p>Now imagine that, for some reason, <code class="docutils literal notranslate"><span class="pre">sisl</span></code> didn’t provide a <code class="docutils literal notranslate"><span class="pre">PlotlyBandsBackend</span></code>. However, <code class="docutils literal notranslate"><span class="pre">sisl</span></code> does have a generic plotly backend:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sisl.viz.backends.plotly</span> <span class="kn">import</span> <span class="n">PlotlyBackend</span>
+</pre></div>
+</div>
+</div>
+<p>And also a generic bands backend:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sisl.viz.backends.templates</span> <span class="kn">import</span> <span class="n">BandsBackend</span>
+</pre></div>
+</div>
+</div>
+<p>In these cases, your situation is not that bad. As you saw, the template backends make use of generic functions like <code class="docutils literal notranslate"><span class="pre">draw_line</span></code> as much as they can, so the effort to implement a plotly bands backend is reduced to those things that can’t be generalized in that way.</p>
+<p>One thing is for sure, we need to combine the two pieces to create the backend that we want:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyPlotlyBandsBackend</span><span class="p">(</span><span class="n">BandsBackend</span><span class="p">,</span> <span class="n">PlotlyBackend</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div>
+</div>
+<p>But is this enough? Let’s see the documentation of <code class="docutils literal notranslate"><span class="pre">BandsBackend</span></code> one more time:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">BandsBackend</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Draws the bands provided by a `BandsPlot`
+
+    The workflow implemented by it is as follows:
+        First, `self.draw_bands` draws all bands like:
+            for band in bands:
+                if (spin texture needs to be drawn):
+                    `self._draw_spin_textured_band()`, NO GENERIC IMPLEMENTATION (optional)
+                else:
+                    `self._draw_band()`, generic implementation that calls `self._draw_line`
+        Once all bands are drawn, `self.draw_gaps` loops through all the gaps to be drawn:
+            for gap in gaps:
+                `self.draw_gap()`, MUST BE IMPLEMENTED!
+
+</pre></div></div>
+</div>
+<p>So, there are to things that need to be implemented: <code class="docutils literal notranslate"><span class="pre">draw_spin_textured_band</span></code> and <code class="docutils literal notranslate"><span class="pre">draw_gap</span></code>.</p>
+<p>We won’t bother to give our backend support for spin texture representations, but the <code class="docutils literal notranslate"><span class="pre">draw_gap</span></code> method is compulsory, so we have no choice. Let’s understand what is expected from this method:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">BandsBackend</span><span class="o">.</span><span class="n">draw_gap</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Help on function draw_gap in module sisl.viz.backends.templates._plots.bands:
+
+draw_gap(self, ks, Es, color, name, **kwargs)
+    This method should draw a gap, given the k and E coordinates.
+
+    The color of the line should be determined by `color`, and `name` should be used for labeling.
+
+    Parameters
+    -----------
+    ks: numpy array of shape (2,)
+        The two k coordinates of the gap.
+    Es: numpy array of shape (2,)
+        The two E coordinates of the gap, sorted from minor to major.
+    color: str
+        Color with which the gap should be drawn.
+    name: str
+        Label that should be asigned to the gap.
+
+</pre></div></div>
+</div>
+<p>Quite simple, isn’t it? It seems like we are provided with the coordinates of the gap and then we can display it however we want.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyPlotlyBandsBackend</span><span class="p">(</span><span class="n">BandsBackend</span><span class="p">,</span> <span class="n">PlotlyBackend</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">draw_gap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ks</span><span class="p">,</span> <span class="n">Es</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">draw_line</span><span class="p">(</span>
+            <span class="n">ks</span><span class="p">,</span> <span class="n">Es</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="n">text</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">Es</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="w"> </span><span class="n">Es</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> eV&quot;</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines+markers&quot;</span><span class="p">,</span>
+            <span class="n">line</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">color</span><span class="p">},</span>
+            <span class="n">marker_symbol</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;triangle-up&quot;</span><span class="p">,</span> <span class="s2">&quot;triangle-down&quot;</span><span class="p">],</span>
+            <span class="n">marker</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="n">color</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">},</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+
+<span class="c1"># Make it the default backend for bands, since it is awesome.</span>
+<span class="n">BandsPlot</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;plotly_fromscratch&quot;</span><span class="p">,</span> <span class="n">MyPlotlyBandsBackend</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Let’s see our masterpiece:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">band_struct</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">gap</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"version_major": 2, "version_minor": 0, "model_id": "f09275afcdfa4a259339a9da522d5a68"}</script></div>
+</div>
+<p>Beautiful!</p>
+<p>So, to end this section, just two remarks:</p>
+<ul class="simple">
+<li><p>We have understood that if the framework is supported, the starting point is to <strong>combine the generic backend for the framework</strong> (<code class="docutils literal notranslate"><span class="pre">PlotlyBackend</span></code>) <strong>with the template backend of the specific plot</strong> (<code class="docutils literal notranslate"><span class="pre">BandsBackend</span></code>). Afterwards, we may have to tweak things a little.</p></li>
+<li><p><strong>Knowing how the generic framework backend works</strong> helps to make your code simpler. E.g. if you check <code class="docutils literal notranslate"><span class="pre">PlotlyBackend.__doc__</span></code>, you will find that we could have easily included some defaults for the axes titles.</p></li>
+</ul>
+</section>
+<section id="Creating-a-backend-for-a-non-supported-framework">
+<h2>Creating a backend for a non supported framework<a class="headerlink" href="#Creating-a-backend-for-a-non-supported-framework" title="Link to this heading"></a></h2>
+<p>Armed with our knowledge from the previous sections, we face the most difficult of the challenges: <em>there’s not even a generic backend for the framework that we want to use</em>.</p>
+<p>What we have to do is quite clear, <strong>develop our own generic backend</strong>. But how? Let’s go to the <code class="docutils literal notranslate"><span class="pre">Backend</span></code> class for help:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sisl.viz.backends.templates</span> <span class="kn">import</span> <span class="n">Backend</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">Backend</span><span class="o">.</span><span class="vm">__doc__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Base backend class that all backends should inherit from.
+
+    This class contains various methods that need to be implemented by its subclasses.
+
+    Methods that MUST be implemented are marked as abstract methods, therefore you won&#39;t
+    even be able to use the class if you don&#39;t implement them. On the other hand, there are
+    methods that are not absolutely essential to the general workings of the framework.
+    These are written in this class to raise a NotImplementedError. Therefore, the backend
+    will be instantiable but errors may happen during the plotting process.
+
+    Below are all methods that need to be implemented by...
+
+    (1) the generic backend of the framework:
+        - `clear`, MUST
+        - `draw_on`, optional (highly recommended, otherwise no multiple plot functionality)
+        - `draw_line`, optional (highly recommended for 2D)
+        - `draw_scatter`, optional (highly recommended for 2D)
+        - `draw_line3D`, optional
+        - `draw_scatter3D`, optional
+        - `draw_arrows3D`, optional
+        - `show`, optional
+
+    (2) specific backend of a plot:
+        - `draw`, MUST
+
+    Also, you probably need to write an `__init__` method to initialize the state of the plot.
+    Usually drawing methods will add to the state and finally on `show` you display the full
+    plot.
+
+</pre></div></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title fa fa-exclamation-circle">Note</p>
+<p>You can always look at the help of each specific method to understand exactly what you need to implement. E.g. <code class="docutils literal notranslate"><span class="pre">help(Backend.draw_line)</span></code>.</p>
+</div>
+<p>To make it simple, let’s say we want to create a backend for “text”. This backend will <strong>store everything as text in its state</strong>, and it will print it on <code class="docutils literal notranslate"><span class="pre">show</span></code>. Here would be a minimal design:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TextBackend</span><span class="p">(</span><span class="n">Backend</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">draw_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">LINE: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span> <span class="nf">draw_scatter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">SCATTER: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="se">\n</span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="k">def</span> <span class="nf">draw_on</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_backend</span><span class="p">):</span>
+        <span class="c1"># Set the text attribute to the other backend&#39;s text, but store ours</span>
+        <span class="n">self_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">other_backend</span><span class="o">.</span><span class="n">text</span>
+        <span class="c1"># Make the plot draw the figure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plot</span><span class="o">.</span><span class="n">get_figure</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_backend_name</span><span class="p">,</span> <span class="n">clear_fig</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="c1"># Restore our text attribute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">self_text</span>
+
+    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>This could very well be our generic backend for the “text” framework. Now we can use the knowledge of the previous section to create a backend for the bands plot:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TextBandsBackend</span><span class="p">(</span><span class="n">BandsBackend</span><span class="p">,</span> <span class="n">TextBackend</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">draw_gap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ks</span><span class="p">,</span> <span class="n">Es</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">draw_line</span><span class="p">(</span><span class="n">ks</span><span class="p">,</span> <span class="n">Es</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+
+<span class="c1"># Register it, as always</span>
+<span class="n">BandsPlot</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="n">TextBandsBackend</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">band_struct</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">_debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+LINE: 0
+[0.         0.08194034 0.16388068 0.24582102 0.32776136 0.4097017
+ 0.49164204 0.57358238 0.65552272 0.73746306]
+[-8.1        -8.07260764 -7.99070941 -7.85514486 -7.66732391 -7.42924537
+ -7.14352854 -6.81346515 -6.44310336 -6.03738354]
+LINE: 1
+[0.         0.08194034 0.16388068 0.24582102 0.32776136 0.4097017
+ 0.49164204 0.57358238 0.65552272 0.73746306]
+[-2.7        -2.78082828 -3.00808297 -3.34614692 -3.75661337 -4.20788704
+ -4.67653718 -5.14555076 -5.60235836 -6.03738354]
+LINE: 2
+[0.         0.08194034 0.16388068 0.24582102 0.32776136 0.4097017
+ 0.49164204 0.57358238 0.65552272 0.73746306]
+[2.7        2.78082828 3.00808297 3.34614692 3.75661337 4.20788704
+ 4.67653718 5.14555076 5.60235836 6.03738354]
+LINE: 3
+[0.         0.08194034 0.16388068 0.24582102 0.32776136 0.4097017
+ 0.49164204 0.57358238 0.65552272 0.73746306]
+[8.1        8.07260764 7.99070941 7.85514486 7.66732391 7.42924537
+ 7.14352854 6.81346515 6.44310336 6.03738354]
+LINE: Gap
+[0.0, 0.0]
+[-2.699999999999994, 2.7000000000000126]
+</pre></div></div>
+</div>
+<p>And everything works great! Note that since the backend is <strong>independent of the processing logic</strong>, I can use any setting of <code class="docutils literal notranslate"><span class="pre">BandsPlot</span></code> and it will work:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bands_plot</span> <span class="o">=</span> <span class="n">band_struct</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">backend</span><span class="o">=</span><span class="s2">&quot;text&quot;</span><span class="p">,</span> <span class="n">gap</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">_debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">bands_plot</span><span class="o">.</span><span class="n">update_settings</span><span class="p">(</span>
+    <span class="n">bands_range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span>
+    <span class="n">custom_gaps</span><span class="o">=</span><span class="p">[{</span><span class="s2">&quot;from&quot;</span><span class="p">:</span> <span class="s2">&quot;Gamma&quot;</span><span class="p">,</span> <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="s2">&quot;Gamma&quot;</span><span class="p">},</span> <span class="p">{</span><span class="s2">&quot;from&quot;</span><span class="p">:</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;to&quot;</span><span class="p">:</span> <span class="s2">&quot;X&quot;</span><span class="p">}]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+LINE: 0
+[0.         0.08194034 0.16388068 0.24582102 0.32776136 0.4097017
+ 0.49164204 0.57358238 0.65552272 0.73746306]
+[-8.1        -8.07260764 -7.99070941 -7.85514486 -7.66732391 -7.42924537
+ -7.14352854 -6.81346515 -6.44310336 -6.03738354]
+LINE: 1
+[0.         0.08194034 0.16388068 0.24582102 0.32776136 0.4097017
+ 0.49164204 0.57358238 0.65552272 0.73746306]
+[-2.7        -2.78082828 -3.00808297 -3.34614692 -3.75661337 -4.20788704
+ -4.67653718 -5.14555076 -5.60235836 -6.03738354]
+LINE: 2
+[0.         0.08194034 0.16388068 0.24582102 0.32776136 0.4097017
+ 0.49164204 0.57358238 0.65552272 0.73746306]
+[2.7        2.78082828 3.00808297 3.34614692 3.75661337 4.20788704
+ 4.67653718 5.14555076 5.60235836 6.03738354]
+LINE: 3
+[0.         0.08194034 0.16388068 0.24582102 0.32776136 0.4097017
+ 0.49164204 0.57358238 0.65552272 0.73746306]
+[8.1        8.07260764 7.99070941 7.85514486 7.66732391 7.42924537
+ 7.14352854 6.81346515 6.44310336 6.03738354]
+LINE: Gap
+[0.0, 0.0]
+[-2.699999999999994, 2.7000000000000126]
+LINE: Gap (Gamma-Gamma)
+[0.0, 0.0]
+[-2.699999999999994, 2.7000000000000126]
+LINE: Gap (X-X)
+[0.7374630642229563, 0.7374630642229563]
+[-6.037383539249426, 6.037383539249433]
+</pre></div></div>
+</div>
+<p><em>It wasn’t that difficult, right?</em></p>
+<p>We are very thankful that you took the time to understand how to build backends on top of the <code class="docutils literal notranslate"><span class="pre">sisl.viz</span></code> framework! Any feedback on it will be highly appreciated and we are looking forward to see your implementations!</p>
+<script type="application/vnd.jupyter.widget-state+json">
+{"state": {"ec8839592c7a4ef48c1c480a54a03460": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.17.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"hoverinfo": "name", "hovertemplate": "%{y:.2f} eV", "line": {"color": "black", "width": 1.0}, "mode": "lines", "name": "0", "opacity": 1, "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "d2b7c3e9-b371-4f99-9ea0-538872248dd1"}, {"hoverinfo": "name", "hovertemplate": "%{y:.2f} eV", "line": {"color": "black", "width": 1.0}, "mode": "lines", "name": "1", "opacity": 1, "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "dfe385b4-8533-49c5-af47-2fdcb331a359"}, {"hoverinfo": "name", "hovertemplate": "%{y:.2f} eV", "line": {"color": "black", "width": 1.0}, "mode": "lines", "name": "2", "opacity": 1, "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "8d81d87f-eee0-47ec-a8c4-95ab729224a4"}, {"hoverinfo": "name", "hovertemplate": "%{y:.2f} eV", "line": {"color": "black", "width": 1.0}, "mode": "lines", "name": "3", "opacity": 1, "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "ddd31483-f1e9-4df2-ae9a-e00f0350917e"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_last_layout_edit_id": 0, "_last_trace_edit_id": 0, "_layout": {"template": {"layout": {"hovermode": "closest", "paper_bgcolor": "white", "plot_bgcolor": "white", "scene": {"xaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}, "yaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}, "zaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}}, "xaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}, "yaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}}}, "xaxis": {"mirror": true, "range": [0.0, 0.7374630642229563], "showgrid": true, "ticktext": ["Gamma", "X"], "tickvals": [0.0, 0.7374630642229563], "title": {"text": "K"}}, "yaxis": {"mirror": true, "range": [-8.099999999999982, 8.1], "title": {"text": "Energy [eV]"}}}, "_model_module": "jupyterlab-plotly", "_model_module_version": "^5.17.0", "_model_name": "FigureModel", "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0, "_view_module": "jupyterlab-plotly", "_view_module_version": "^5.17.0", "_view_name": "FigureView", "tabbable": null, "tooltip": null}, "buffers": [{"data": "AAAAAAAAAAAu1InKCvq0Py7UicoK+sQ/Rb7OLxB3zz8u1InKCvrUPzpJLH2NONo/Rb7OLxB33z+pmThxyVriPy7UicoK+uQ/tA7bI0yZ5z8=", "encoding": "base64", "path": ["_data", 0, "x", "buffer"]}, {"data": "KTMzMzMzIMB1sQ3ULCUgwNw91oZ89h/A1DIfGKtrH8DUHJz1VqsewAhr2BiMtx3AXzZDJfmSHMDwcUMC/UAbwNtL4eK8xRnAqPDZ3kcmGMA=", "encoding": "base64", "path": ["_data", 0, "y", "buffer"]}, {"data": "AAAAAAAAAAAu1InKCvq0Py7UicoK+sQ/Rb7OLxB3zz8u1InKCvrUPzpJLH2NONo/Rb7OLxB33z+pmThxyVriPy7UicoK+uQ/tA7bI0yZ5z8=", "encoding": "base64", "path": ["_data", 1, "x", "buffer"]}, {"data": "jJmZmZmZBcA46a7lIj8GwJiHZM6NEAjAmEJ3rejECsA4WvpPiw0OwFjhxlbg1BDAgwCiKca0EsAaPCNCC5UUwEPt7qDQaBbAqPDZ3kcmGMA=", "encoding": "base64", "path": ["_data", 1, "y", "buffer"]}, {"data": "AAAAAAAAAAAu1InKCvq0Py7UicoK+sQ/Rb7OLxB3zz8u1InKCvrUPzpJLH2NONo/Rb7OLxB33z+pmThxyVriPy7UicoK+uQ/tA7bI0yZ5z8=", "encoding": "base64", "path": ["_data", 2, "x", "buffer"]}, {"data": "tpmZmZmZBUBg6a7lIj8GQL6HZM6NEAhAskJ3rejECkBQWvpPiw0OQGThxlbg1BBAlACiKca0EkAjPCNCC5UUQEft7qDQaBZAsPDZ3kcmGEA=", "encoding": "base64", "path": ["_data", 2, "y", "buffer"]}, {"data": "AAAAAAAAAAAu1InKCvq0Py7UicoK+sQ/Rb7OLxB3zz8u1InKCvrUPzpJLH2NONo/Rb7OLxB33z+pmThxyVriPy7UicoK+uQ/tA7bI0yZ5z8=", "encoding": "base64", "path": ["_data", 3, "x", "buffer"]}, {"data": "MzMzMzMzIEB/sQ3ULCUgQPI91oZ89h9A7DIfGKtrH0DmHJz1VqseQBlr2BiMtx1AbzZDJfmSHED9cUMC/UAbQOFL4eK8xRlAsPDZ3kcmGEA=", "encoding": "base64", "path": ["_data", 3, "y", "buffer"]}]}, "2780375a73e64bc0a565af025ed9e8c4": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.17.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"hoverinfo": "name", "hovertemplate": "%{y:.2f} eV", "line": {"color": "black", "width": 1.0}, "mode": "lines", "name": "0", "opacity": 1, "showlegend": true, "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "dbe6906a-8678-4cfc-b96a-b005cbf5c39f"}, {"hoverinfo": "name", "hovertemplate": "%{y:.2f} eV", "line": {"color": "black", "width": 1.0}, "mode": "lines", "name": "1", "opacity": 1, "showlegend": true, "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "d2bc27a3-4f2d-4afa-aaed-39161e1afa7f"}, {"hoverinfo": "name", "hovertemplate": "%{y:.2f} eV", "line": {"color": "black", "width": 1.0}, "mode": "lines", "name": "2", "opacity": 1, "showlegend": false, "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "373db949-4d7c-4ab5-92c5-f61c69567d47"}, {"hoverinfo": "name", "hovertemplate": "%{y:.2f} eV", "line": {"color": "black", "width": 1.0}, "mode": "lines", "name": "3", "opacity": 1, "showlegend": false, "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "61f5287d-6b76-4a9a-8caa-60ef861aee06"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_last_layout_edit_id": 0, "_last_trace_edit_id": 0, "_layout": {"template": {"layout": {"hovermode": "closest", "paper_bgcolor": "white", "plot_bgcolor": "white", "scene": {"xaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}, "yaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}, "zaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}}, "xaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}, "yaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}}}, "xaxis": {"mirror": true, "range": [0.0, 0.7374630642229563], "showgrid": true, "ticktext": ["Gamma", "X"], "tickvals": [0.0, 0.7374630642229563], "title": {"text": "K"}}, "yaxis": {"mirror": true, "range": [-8.099999999999982, 8.1], "title": {"text": "Energy [eV]"}}}, "_model_module": "jupyterlab-plotly", "_model_module_version": "^5.17.0", "_model_name": "FigureModel", "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0, "_view_module": "jupyterlab-plotly", "_view_module_version": "^5.17.0", "_view_name": "FigureView", "tabbable": null, "tooltip": null}, "buffers": [{"data": "AAAAAAAAAAAu1InKCvq0Py7UicoK+sQ/Rb7OLxB3zz8u1InKCvrUPzpJLH2NONo/Rb7OLxB33z+pmThxyVriPy7UicoK+uQ/tA7bI0yZ5z8=", "encoding": "base64", "path": ["_data", 0, "x", "buffer"]}, {"data": "KTMzMzMzIMB1sQ3ULCUgwNw91oZ89h/A1DIfGKtrH8DUHJz1VqsewAhr2BiMtx3AXzZDJfmSHMDwcUMC/UAbwNtL4eK8xRnAqPDZ3kcmGMA=", "encoding": "base64", "path": ["_data", 0, "y", "buffer"]}, {"data": "AAAAAAAAAAAu1InKCvq0Py7UicoK+sQ/Rb7OLxB3zz8u1InKCvrUPzpJLH2NONo/Rb7OLxB33z+pmThxyVriPy7UicoK+uQ/tA7bI0yZ5z8=", "encoding": "base64", "path": ["_data", 1, "x", "buffer"]}, {"data": "jJmZmZmZBcA46a7lIj8GwJiHZM6NEAjAmEJ3rejECsA4WvpPiw0OwFjhxlbg1BDAgwCiKca0EsAaPCNCC5UUwEPt7qDQaBbAqPDZ3kcmGMA=", "encoding": "base64", "path": ["_data", 1, "y", "buffer"]}, {"data": "AAAAAAAAAAAu1InKCvq0Py7UicoK+sQ/Rb7OLxB3zz8u1InKCvrUPzpJLH2NONo/Rb7OLxB33z+pmThxyVriPy7UicoK+uQ/tA7bI0yZ5z8=", "encoding": "base64", "path": ["_data", 2, "x", "buffer"]}, {"data": "tpmZmZmZBUBg6a7lIj8GQL6HZM6NEAhAskJ3rejECkBQWvpPiw0OQGThxlbg1BBAlACiKca0EkAjPCNCC5UUQEft7qDQaBZAsPDZ3kcmGEA=", "encoding": "base64", "path": ["_data", 2, "y", "buffer"]}, {"data": "AAAAAAAAAAAu1InKCvq0Py7UicoK+sQ/Rb7OLxB3zz8u1InKCvrUPzpJLH2NONo/Rb7OLxB33z+pmThxyVriPy7UicoK+uQ/tA7bI0yZ5z8=", "encoding": "base64", "path": ["_data", 3, "x", "buffer"]}, {"data": "MzMzMzMzIEB/sQ3ULCUgQPI91oZ89h9A7DIfGKtrH0DmHJz1VqseQBlr2BiMtx1AbzZDJfmSHED9cUMC/UAbQOFL4eK8xRlAsPDZ3kcmGEA=", "encoding": "base64", "path": ["_data", 3, "y", "buffer"]}]}, "98287c26221144a4bc5290550c969b63": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.17.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"hoverinfo": "name", "hovertemplate": "%{y:.2f} eV", "line": {"color": "black", "width": 1.0}, "mode": "lines", "name": "0", "opacity": 1, "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "4a26cb70-62d4-45b0-8258-6e126620f83f"}, {"hoverinfo": "name", "hovertemplate": "%{y:.2f} eV", "line": {"color": "black", "width": 1.0}, "mode": "lines", "name": "1", "opacity": 1, "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "ffb13709-1bdf-4b4f-a349-de19d10171d2"}, {"hoverinfo": "name", "hovertemplate": "%{y:.2f} eV", "line": {"color": "black", "width": 1.0}, "mode": "lines", "name": "2", "opacity": 1, "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "96927d4f-1bec-45c4-9568-9c3cc3fc102f"}, {"hoverinfo": "name", "hovertemplate": "%{y:.2f} eV", "line": {"color": "black", "width": 1.0}, "mode": "lines", "name": "3", "opacity": 1, "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "cc4ff376-4690-4815-8df6-65a8da1d44a2"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_last_layout_edit_id": 0, "_last_trace_edit_id": 0, "_layout": {"shapes": [{"line": {"color": "red"}, "type": "line", "x0": 0, "x1": 1, "xref": "x domain", "y0": -2, "y1": -2, "yref": "y"}], "template": {"layout": {"hovermode": "closest", "paper_bgcolor": "white", "plot_bgcolor": "white", "scene": {"xaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}, "yaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}, "zaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}}, "xaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}, "yaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}}}, "xaxis": {"mirror": true, "range": [0.0, 0.7374630642229563], "showgrid": true, "ticktext": ["Gamma", "X"], "tickvals": [0.0, 0.7374630642229563], "title": {"text": "K"}}, "yaxis": {"mirror": true, "range": [-8.099999999999982, 8.1], "title": {"text": "Energy [eV]"}}}, "_model_module": "jupyterlab-plotly", "_model_module_version": "^5.17.0", "_model_name": "FigureModel", "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0, "_view_module": "jupyterlab-plotly", "_view_module_version": "^5.17.0", "_view_name": "FigureView", "tabbable": null, "tooltip": null}, "buffers": [{"data": "AAAAAAAAAAAu1InKCvq0Py7UicoK+sQ/Rb7OLxB3zz8u1InKCvrUPzpJLH2NONo/Rb7OLxB33z+pmThxyVriPy7UicoK+uQ/tA7bI0yZ5z8=", "encoding": "base64", "path": ["_data", 0, "x", "buffer"]}, {"data": "KTMzMzMzIMB1sQ3ULCUgwNw91oZ89h/A1DIfGKtrH8DUHJz1VqsewAhr2BiMtx3AXzZDJfmSHMDwcUMC/UAbwNtL4eK8xRnAqPDZ3kcmGMA=", "encoding": "base64", "path": ["_data", 0, "y", "buffer"]}, {"data": "AAAAAAAAAAAu1InKCvq0Py7UicoK+sQ/Rb7OLxB3zz8u1InKCvrUPzpJLH2NONo/Rb7OLxB33z+pmThxyVriPy7UicoK+uQ/tA7bI0yZ5z8=", "encoding": "base64", "path": ["_data", 1, "x", "buffer"]}, {"data": "jJmZmZmZBcA46a7lIj8GwJiHZM6NEAjAmEJ3rejECsA4WvpPiw0OwFjhxlbg1BDAgwCiKca0EsAaPCNCC5UUwEPt7qDQaBbAqPDZ3kcmGMA=", "encoding": "base64", "path": ["_data", 1, "y", "buffer"]}, {"data": "AAAAAAAAAAAu1InKCvq0Py7UicoK+sQ/Rb7OLxB3zz8u1InKCvrUPzpJLH2NONo/Rb7OLxB33z+pmThxyVriPy7UicoK+uQ/tA7bI0yZ5z8=", "encoding": "base64", "path": ["_data", 2, "x", "buffer"]}, {"data": "tpmZmZmZBUBg6a7lIj8GQL6HZM6NEAhAskJ3rejECkBQWvpPiw0OQGThxlbg1BBAlACiKca0EkAjPCNCC5UUQEft7qDQaBZAsPDZ3kcmGEA=", "encoding": "base64", "path": ["_data", 2, "y", "buffer"]}, {"data": "AAAAAAAAAAAu1InKCvq0Py7UicoK+sQ/Rb7OLxB3zz8u1InKCvrUPzpJLH2NONo/Rb7OLxB33z+pmThxyVriPy7UicoK+uQ/tA7bI0yZ5z8=", "encoding": "base64", "path": ["_data", 3, "x", "buffer"]}, {"data": "MzMzMzMzIEB/sQ3ULCUgQPI91oZ89h9A7DIfGKtrH0DmHJz1VqseQBlr2BiMtx1AbzZDJfmSHED9cUMC/UAbQOFL4eK8xRlAsPDZ3kcmGEA=", "encoding": "base64", "path": ["_data", 3, "y", "buffer"]}]}, "f09275afcdfa4a259339a9da522d5a68": {"model_name": "FigureModel", "model_module": "jupyterlab-plotly", "model_module_version": "^5.17.0", "state": {"_config": {"plotlyServerURL": "https://plot.ly"}, "_data": [{"line": {"color": "black", "width": 1.0}, "mode": "lines", "name": "0", "opacity": 1, "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "7a412814-557d-412f-87a8-49b4b120274d"}, {"line": {"color": "black", "width": 1.0}, "mode": "lines", "name": "1", "opacity": 1, "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "1e6fc38c-4754-44b1-bca3-c8df767a0224"}, {"line": {"color": "black", "width": 1.0}, "mode": "lines", "name": "2", "opacity": 1, "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "d483284f-bdc2-4fd2-b9cc-c1e8a21ac5d3"}, {"line": {"color": "black", "width": 1.0}, "mode": "lines", "name": "3", "opacity": 1, "x": {"dtype": "float64", "shape": [10]}, "y": {"dtype": "float64", "shape": [10]}, "type": "scatter", "uid": "50408316-0287-492c-9ef9-5ee1c9fb8556"}, {"marker": {"size": 20, "symbol": ["triangle-up", "triangle-down"]}, "mode": "lines+markers", "name": "Gap", "opacity": 1, "text": "5.40 eV", "x": [0.0, 0.0], "y": [-2.699999999999994, 2.7000000000000126], "type": "scatter", "uid": "09f928d7-1f00-4fae-9659-01ed7f4d73a4"}], "_dom_classes": [], "_js2py_layoutDelta": {}, "_js2py_pointsCallback": {}, "_js2py_relayout": {}, "_js2py_restyle": {}, "_js2py_traceDeltas": {}, "_js2py_update": {}, "_last_layout_edit_id": 0, "_last_trace_edit_id": 0, "_layout": {"template": {"layout": {"hovermode": "closest", "paper_bgcolor": "white", "plot_bgcolor": "white", "scene": {"xaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}, "yaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}, "zaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}}, "xaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}, "yaxis": {"color": "black", "gridcolor": "#ccc", "gridwidth": 1, "linewidth": 1, "mirror": true, "showgrid": false, "showline": true, "ticklen": 5, "ticks": "outside", "ticksuffix": " ", "visible": true, "zeroline": false, "zerolinecolor": "#ccc", "zerolinewidth": 1}}}}, "_model_module": "jupyterlab-plotly", "_model_module_version": "^5.17.0", "_model_name": "FigureModel", "_py2js_addTraces": {}, "_py2js_animate": {}, "_py2js_deleteTraces": {}, "_py2js_moveTraces": {}, "_py2js_relayout": {}, "_py2js_removeLayoutProps": {}, "_py2js_removeTraceProps": {}, "_py2js_restyle": {}, "_py2js_update": {}, "_view_count": 0, "_view_module": "jupyterlab-plotly", "_view_module_version": "^5.17.0", "_view_name": "FigureView", "tabbable": null, "tooltip": null}, "buffers": [{"data": "AAAAAAAAAAAu1InKCvq0Py7UicoK+sQ/Rb7OLxB3zz8u1InKCvrUPzpJLH2NONo/Rb7OLxB33z+pmThxyVriPy7UicoK+uQ/tA7bI0yZ5z8=", "encoding": "base64", "path": ["_data", 0, "x", "buffer"]}, {"data": "KTMzMzMzIMB1sQ3ULCUgwNw91oZ89h/A1DIfGKtrH8DUHJz1VqsewAhr2BiMtx3AXzZDJfmSHMDwcUMC/UAbwNtL4eK8xRnAqPDZ3kcmGMA=", "encoding": "base64", "path": ["_data", 0, "y", "buffer"]}, {"data": "AAAAAAAAAAAu1InKCvq0Py7UicoK+sQ/Rb7OLxB3zz8u1InKCvrUPzpJLH2NONo/Rb7OLxB33z+pmThxyVriPy7UicoK+uQ/tA7bI0yZ5z8=", "encoding": "base64", "path": ["_data", 1, "x", "buffer"]}, {"data": "jJmZmZmZBcA46a7lIj8GwJiHZM6NEAjAmEJ3rejECsA4WvpPiw0OwFjhxlbg1BDAgwCiKca0EsAaPCNCC5UUwEPt7qDQaBbAqPDZ3kcmGMA=", "encoding": "base64", "path": ["_data", 1, "y", "buffer"]}, {"data": "AAAAAAAAAAAu1InKCvq0Py7UicoK+sQ/Rb7OLxB3zz8u1InKCvrUPzpJLH2NONo/Rb7OLxB33z+pmThxyVriPy7UicoK+uQ/tA7bI0yZ5z8=", "encoding": "base64", "path": ["_data", 2, "x", "buffer"]}, {"data": "tpmZmZmZBUBg6a7lIj8GQL6HZM6NEAhAskJ3rejECkBQWvpPiw0OQGThxlbg1BBAlACiKca0EkAjPCNCC5UUQEft7qDQaBZAsPDZ3kcmGEA=", "encoding": "base64", "path": ["_data", 2, "y", "buffer"]}, {"data": "AAAAAAAAAAAu1InKCvq0Py7UicoK+sQ/Rb7OLxB3zz8u1InKCvrUPzpJLH2NONo/Rb7OLxB33z+pmThxyVriPy7UicoK+uQ/tA7bI0yZ5z8=", "encoding": "base64", "path": ["_data", 3, "x", "buffer"]}, {"data": "MzMzMzMzIEB/sQ3ULCUgQPI91oZ89h9A7DIfGKtrH0DmHJz1VqseQBlr2BiMtx1AbzZDJfmSHED9cUMC/UAbQOFL4eK8xRlAsPDZ3kcmGEA=", "encoding": "base64", "path": ["_data", 3, "y", "buffer"]}]}}, "version_major": 2, "version_minor": 0}
+</script></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../combining-plots/Intro%20to%20multiple%20plots.html" class="btn btn-neutral float-left" title="Intro to multiple plots" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../../api/index.html" class="btn btn-neutral float-right" title="API documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2015-2023, Nick Papior.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
